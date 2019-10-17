@@ -11,6 +11,9 @@ using Android;
 using Android.Support.V4.App;
 using Android.Content.PM;
 using Android.Util;
+using Environment = Android.OS.Environment;
+using System.IO;
+using static Android.Provider.DocumentsContract;
 
 namespace CaitlinAudio
 {
@@ -150,9 +153,31 @@ namespace CaitlinAudio
 
         private void RecordAudio()
         {
+
             if (isGrantedPermission)
             {
-                pathSave = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath.ToString() + "/" + new Guid().ToString() + "_audio.3gp";
+
+                string path = global::Android.OS.Environment.ExternalStorageDirectory.Path + "/hello.txt";
+
+                using (var streamWriter = new StreamWriter(path, true))
+                {
+                    streamWriter.WriteLine(DateTime.UtcNow);
+                }
+
+                using (var streamReader = new StreamReader(path))
+                {
+                    string content = streamReader.ReadToEnd();
+                    System.Diagnostics.Debug.WriteLine(content);
+                }
+
+
+
+
+
+
+                pathSave = global::Android.OS.Environment.ExternalStorageDirectory.Path + "/_audio.3gp";
+                //pathSave = global::Android.OS.Environment.ExternalStorageDirectory.Path + "/" + new Guid().ToString() + "_audio.3gp";
+
                 SetUpMediaRecorder();
                 try
                 {
@@ -179,6 +204,12 @@ namespace CaitlinAudio
             mediaRecorder.SetAudioEncoder(AudioEncoder.AmrNb);
             mediaRecorder.SetOutputFile(pathSave);
         }
-	}
+
+
+
+
+
+    }
+
 }
 
